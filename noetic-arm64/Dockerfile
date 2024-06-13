@@ -13,3 +13,23 @@ RUN mkdir -p /tmp/ros_setup_scripts_ubuntu && mv /ros-noetic-desktop.sh /tmp/ros
     gosu ubuntu /tmp/ros_setup_scripts_ubuntu/ros-noetic-desktop.sh && \
     rm -rf /var/lib/apt/lists/*
 ENV USER ubuntu
+
+# ============================
+# added by tylee, after this line
+
+RUN apt update && apt install \ 
+    ros-$ROS_DISTRO-plotjuggler-ros \
+    vim
+
+RUN mkdir -p /colcon_ws/src \
+    && mkdir /installer
+  
+WORKDIR /installer
+COPY set-vi.sh .
+RUN sh set-vi.sh
+RUN rm -rf /installer
+
+WORKDIR /catkin_ws
+
+# create share directory
+RUN mkdir -p /root/share
